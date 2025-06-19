@@ -8,7 +8,7 @@ import Statistics from '../Statistics/Statistics';
 import FriendList from '../FriendList/FriendList';
 import TransactionHistory from '../TransactionHistory/TransactionHistory';
 
-import './App.css';
+import css from './App.module.css';
 
 function App() {
   return (
