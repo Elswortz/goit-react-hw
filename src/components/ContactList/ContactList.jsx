@@ -1,6 +1,8 @@
+import css from './ContactList.module.css';
+
 function ContactList({ contacts, onDeleteBtnClick }) {
   return (
-    <ul className="contacts">
+    <ul className={css.list}>
       {contacts.map(({ id, name, number }) => (
         <li key={id} className="contactItem">
           {name} {number}{' '}

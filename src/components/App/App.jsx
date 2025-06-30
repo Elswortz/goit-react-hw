@@ -13,7 +13,15 @@ class App extends Component {
     filter: '',
   };
 
-  addContact = (name, number) => {
+  addContact = ({ name, number }) => {
+    const ContactAlreadyExist = this.state.contacts.some(
+      item => item.name === name
+    );
+    if (ContactAlreadyExist) {
+      alert('This contact already exist!');
+      return;
+    }
+
     const newContact = {
       id: nanoid(),
       name,
@@ -44,12 +52,15 @@ class App extends Component {
   };
 
   render() {
-    const { contacts, filter } = this.state;
+    const { filter } = this.state;
     const filteredContacts = this.filterContacts();
     return (
       <>
+        <h1>Phonebook</h1>
         <ContactForm onFormSubmit={this.addContact} />
-        <Filter value={filter} onFilterChange={this.onFilterChange} />
+        {this.state.contacts.length > 0 && (
+          <Filter value={filter} onFilterChange={this.onFilterChange} />
+        )}
         <ContactList
           contacts={filteredContacts}
           onDeleteBtnClick={this.deleteContact}
