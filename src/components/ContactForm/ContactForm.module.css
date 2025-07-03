@@ -1,0 +1,33 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 1000px;
+  margin-bottom: 30px;
+}
+
+.fieldFullGroup {
+}
+
+.fieldGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.field {
+  width: 400px;
+  height: 20px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.label {
+  display: block;
+}
+
+.errormessage {
+  color: red;
+  font-size: 0.875rem;
+  width: 40%;
+}
