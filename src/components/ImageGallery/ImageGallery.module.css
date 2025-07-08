@@ -8,21 +8,6 @@
   list-style: none;
 }
 
-.galleryItem {
-  width: 250px;
-  height: 250px;
-  overflow: hidden;
-  border-radius: 8px;
-
-  transform: scale(1);
-  transition: transform 0.3s ease-in-out;
-}
-
-.galleryItem:hover {
-  transform: scale(1.05);
-  cursor: pointer;
-}
-
 .error {
   color: red;
   text-align: center;

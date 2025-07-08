@@ -5,6 +5,7 @@ const override = {
   justifyContent: 'center',
   margin: '0 auto',
   borderColor: 'grey',
+  marginBottom: '20px',
 };
 
 function Loader({ loading }) {

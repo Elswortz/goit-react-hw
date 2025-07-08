@@ -5,6 +5,7 @@ import * as API from '../../services/pixabay-api.js';
 import ImageGalleryItem from './ImageGalleryItem.jsx';
 import Loader from '../Loader/Loader.jsx';
 import Button from '../Button/Button.jsx';
+import Modal from '../Modal/Modal.jsx';
 
 import css from './ImageGallery.module.css';
 
@@ -14,6 +15,8 @@ class ImageGallery extends Component {
     isLoading: false,
     page: 1,
     total: 0,
+    showModal: false,
+    selectedImage: null,
     error: null,
   };
 
@@ -58,8 +61,23 @@ class ImageGallery extends Component {
     }));
   };
 
+  openModal = imageData => {
+    this.setState({
+      selectedImage: imageData,
+      showModal: true,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      selectedImage: null,
+      showModal: false,
+    });
+  };
+
   render() {
-    const { images, isLoading, total, error } = this.state;
+    const { images, isLoading, total, error, showModal, selectedImage } =
+      this.state;
     return (
       <>
         {error && (
@@ -68,15 +86,25 @@ class ImageGallery extends Component {
           </div>
         )}
         <ul className={css.gallery}>
-          {images.map(({ id, webformatURL, tags }) => (
-            <li className={css.galleryItem} key={id}>
-              <ImageGalleryItem src={webformatURL} alt={tags} />
-            </li>
+          {images.map(({ id, webformatURL, largeImageURL, tags }) => (
+            <ImageGalleryItem
+              key={id}
+              src={webformatURL}
+              alt={tags}
+              largeImgURL={largeImageURL}
+              onClick={this.openModal}
+            />
           ))}
         </ul>
         {isLoading && <Loader loading={isLoading} />}
         {images.length > 0 && total !== images.length && (
           <Button onClick={this.loadMoreHandler} />
+        )}
+        {showModal && selectedImage && (
+          <Modal
+            selectedImg={selectedImage}
+            onEscapeKeydown={this.closeModal}
+          />
         )}
       </>
     );
