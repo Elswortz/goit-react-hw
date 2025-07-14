@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import * as API from '../../services/pixabay-api.js';
 
@@ -9,106 +9,96 @@ import Modal from '../Modal/Modal.jsx';
 
 import css from './ImageGallery.module.css';
 
-class ImageGallery extends Component {
-  state = {
-    images: [],
-    isLoading: false,
-    page: 1,
-    total: 0,
-    showModal: false,
-    selectedImage: null,
-    error: null,
-  };
+const ImageGallery = ({ searchText }) => {
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [error, setError] = useState(null);
+  const isFirstRender = useRef(true);
 
-  componentDidUpdate(prevProps, prevState) {
-    const { searchText } = this.props;
-    const { page } = this.state;
-
-    if (prevProps.searchText !== searchText) {
-      this.setState({ images: [], page: 1, error: null }, () =>
-        this.fetchImages(searchText, 1)
-      );
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
 
-    if (prevState.page !== page && prevProps.searchText === searchText) {
-      this.fetchImages(searchText, page);
-    }
-  }
+    if (!searchText) return;
 
-  fetchImages = async (value, page) => {
+    fetchImages(searchText, page);
+  }, [searchText, page]);
+
+  useEffect(() => {
+    if (!searchText) return;
+
+    setImages([]);
+    setPage(1);
+    setError(null);
+  }, [searchText]);
+
+  const fetchImages = async (value, page) => {
     try {
-      this.setState({ isLoading: true });
+      setIsLoading(true);
       const data = await API.getImages(value, page);
 
       if (data.hits.length === 0) {
         throw new Error(`No images found matching the search query "${value}"`);
       }
 
-      this.setState(prevState => ({
-        images: page === 1 ? data.hits : [...prevState.images, ...data.hits],
-        total: data.totalHits,
-      }));
+      setImages(prevImages =>
+        page === 1 ? data.hits : [...prevImages, ...data.hits]
+      );
+      setTotal(data.totalHits);
     } catch (error) {
-      this.setState({ error: error.message });
+      setError(error.message);
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
   };
 
-  loadMoreHandler = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
+  const loadMoreHandler = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
-  openModal = imageData => {
-    this.setState({
-      selectedImage: imageData,
-      showModal: true,
-    });
+  const openModal = imageData => {
+    setSelectedImage(imageData);
+    setShowModal(true);
   };
 
-  closeModal = () => {
-    this.setState({
-      selectedImage: null,
-      showModal: false,
-    });
+  const closeModal = () => {
+    setSelectedImage(null);
+    setShowModal(false);
   };
 
-  render() {
-    const { images, isLoading, total, error, showModal, selectedImage } =
-      this.state;
-    return (
-      <>
-        {error && (
-          <div className={css.error}>
-            <p>{error}</p>
-          </div>
-        )}
-        <ul className={css.gallery}>
-          {images.map(({ id, webformatURL, largeImageURL, tags }) => (
-            <ImageGalleryItem
-              key={id}
-              src={webformatURL}
-              alt={tags}
-              largeImgURL={largeImageURL}
-              onClick={this.openModal}
-            />
-          ))}
-        </ul>
-        {isLoading && <Loader loading={isLoading} />}
-        {images.length > 0 && total !== images.length && (
-          <Button onClick={this.loadMoreHandler} />
-        )}
-        {showModal && selectedImage && (
-          <Modal
-            selectedImg={selectedImage}
-            onEscapeKeydown={this.closeModal}
+  return (
+    <>
+      {error && (
+        <div className={css.error}>
+          <p>{error}</p>
+        </div>
+      )}
+      <ul className={css.gallery}>
+        {images.map(({ id, webformatURL, largeImageURL, tags }) => (
+          <ImageGalleryItem
+            key={id}
+            src={webformatURL}
+            alt={tags}
+            largeImgURL={largeImageURL}
+            onClick={openModal}
           />
-        )}
-      </>
-    );
-  }
-}
+        ))}
+      </ul>
+      {isLoading && <Loader loading={isLoading} />}
+      {images.length > 0 && total !== images.length && (
+        <Button onClick={loadMoreHandler} />
+      )}
+      {showModal && selectedImage && (
+        <Modal selectedImg={selectedImage} onEscapeKeydown={closeModal} />
+      )}
+    </>
+  );
+};
 
 export default ImageGallery;

@@ -1,39 +1,36 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import css from './Modal.module.css';
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.onKeydownHandler);
-  }
+const Modal = ({ selectedImg, onEscapeKeydown }) => {
+  useEffect(() => {
+    window.addEventListener('keydown', onKeydownHandler);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeydownHandler);
-  }
+    return () => {
+      window.removeEventListener('keydown', onKeydownHandler);
+    };
+  }, []);
 
-  onKeydownHandler = e => {
+  const onKeydownHandler = e => {
     if (e.code === 'Escape') {
-      this.props.onEscapeKeydown();
+      onEscapeKeydown();
     }
   };
 
-  onBackdropClick = e => {
+  const onBackdropClick = e => {
     if (e.currentTarget === e.target) {
-      this.props.onEscapeKeydown();
+      onEscapeKeydown();
     }
   };
 
-  render() {
-    const { selectedImg } = this.props;
-    const { largeImgURL, alt } = selectedImg;
+  const { largeImgURL, alt } = selectedImg;
 
-    return (
-      <div className={css.backdrop} onClick={this.onBackdropClick}>
-        <div className={css.modal}>
-          <img className={css.img} src={largeImgURL} alt={alt} />
-        </div>
+  return (
+    <div className={css.backdrop} onClick={onBackdropClick}>
+      <div className={css.modal}>
+        <img className={css.img} src={largeImgURL} alt={alt} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Modal;
