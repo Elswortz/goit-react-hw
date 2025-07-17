@@ -1,6 +1,13 @@
 import { NavLink } from 'react-router';
+import * as API from '../services/movies-api';
 
 function Home() {
+  async function fetchMovies() {
+    const data = await API.getMovieCredits(1087192);
+    console.log(data);
+  }
+  fetchMovies();
+
   return (
     <>
       <h1>Tranding Today</h1>
