@@ -1,9 +1,10 @@
 import { NavLink, Outlet } from 'react-router';
+import MovieOverview from '../components/MovieOverview/MovieOverview';
 
 function MovieDetails() {
   return (
     <>
-      <div>Movie Details</div>
+      <MovieOverview />
       <ul>
         <li>
           <NavLink to="cast">Cast</NavLink>
