@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { NavLink, useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import * as API from '../../services/movies-api';
 
@@ -50,6 +50,14 @@ function MovieOverview() {
           </ul>
         </div>
       </div>
+      <ul>
+        <li>
+          <NavLink to="cast">Cast</NavLink>
+        </li>
+        <li>
+          <NavLink to="reviews">Reviews</NavLink>
+        </li>
+      </ul>
     </>
   );
 }

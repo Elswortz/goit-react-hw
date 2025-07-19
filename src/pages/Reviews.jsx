@@ -1,5 +1,11 @@
+import ReviewsList from '../components/ReviewsList/ReviewsList';
+
 function Reviews() {
-  return <div>Reviews</div>;
+  return (
+    <>
+      <ReviewsList />
+    </>
+  );
 }
 
 export default Reviews;

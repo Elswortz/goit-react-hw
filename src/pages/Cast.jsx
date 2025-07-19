@@ -1,7 +1,9 @@
+import CastList from '../components/CastList/CastList';
+
 function Cast() {
   return (
     <>
-      <div>Cast</div>
+      <CastList />
     </>
   );
 }
