@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import * as API from '../../services/movies-api';
+import css from './CastList.module.css';
 
 function CastList() {
   const [cast, setCast] = useState([]);
@@ -25,9 +26,10 @@ function CastList() {
 
   return (
     <>
-      <ul>
+      <h3>Cast List:</h3>
+      <ul className={css.castList}>
         {cast.map(({ id, name, character, profile_path }) => (
-          <li key={id}>
+          <li className={css.castItem} key={id}>
             <img
               src={`https://image.tmdb.org/t/p/w200${profile_path}`}
               alt={name}

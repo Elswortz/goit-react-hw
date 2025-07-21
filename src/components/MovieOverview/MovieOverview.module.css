@@ -1,0 +1,20 @@
+.back {
+  margin-bottom: 40px;
+}
+
+.wrapper {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.genresList {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.navList {
+  display: flex;
+  gap: 10px;
+}

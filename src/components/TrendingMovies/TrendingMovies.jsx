@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 import * as API from '../../services/movies-api';
+import css from './TrendingMovies.module.css';
 
 function TrendingMovies() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     fetchTendingMovies();
@@ -24,12 +26,14 @@ function TrendingMovies() {
 
   return (
     <>
-      <h1>Tranding Today</h1>
+      <h1 className={css.title}>Tranding Today</h1>
       {isLoading && <div>Loading...</div>}
       <ul>
         {movies.map(({ id, title }) => (
           <li key={id}>
-            <NavLink to={`movies/${id}`}>{title}</NavLink>
+            <NavLink to={`movies/${id}`} state={{ from: location }}>
+              {title}
+            </NavLink>
           </li>
         ))}
       </ul>

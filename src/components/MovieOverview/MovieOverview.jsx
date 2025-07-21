@@ -1,11 +1,14 @@
-import { NavLink, useParams } from 'react-router';
+import { NavLink, useParams, useLocation } from 'react-router';
 import { useState, useEffect } from 'react';
 import * as API from '../../services/movies-api';
+import css from './MovieOverview.module.css';
 
 function MovieOverview() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const backLinkHref = location.state?.from ?? '/movies';
 
   useEffect(() => {
     fetchMovieById(movieId);
@@ -31,8 +34,8 @@ function MovieOverview() {
   return (
     <>
       {isLoading && <div>Loading...</div>}
-      <button type="button">Go back</button>
-      <div>
+      <NavLink to={backLinkHref}>← Go back</NavLink>
+      <div className={css.wrapper}>
         <img
           src={`https://image.tmdb.org/t/p/w300${poster_path}`}
           alt={title}
@@ -42,22 +45,22 @@ function MovieOverview() {
           <p>User score: {vote_average}</p>
           <h3>Overview</h3>
           <p>{overview}</p>
-          <h2>Genres:</h2>
-          <ul>
+          <h3>Genres:</h3>
+          <ul className={css.genresList}>
             {genres.map(({ id, name }) => (
               <li key={id}>{name}</li>
             ))}
           </ul>
+          <ul className={css.navList}>
+            <li>
+              <NavLink to="cast">Cast</NavLink>
+            </li>
+            <li>
+              <NavLink to="reviews">Reviews</NavLink>
+            </li>
+          </ul>
         </div>
       </div>
-      <ul>
-        <li>
-          <NavLink to="cast">Cast</NavLink>
-        </li>
-        <li>
-          <NavLink to="reviews">Reviews</NavLink>
-        </li>
-      </ul>
     </>
   );
 }
