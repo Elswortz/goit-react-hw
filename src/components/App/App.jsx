@@ -1,38 +1,29 @@
+import { filterContacts } from '../../store/Contacts/slice';
 import {
-  addContact,
-  deleteContact,
-  filterContacts,
-} from '../../store/phonebook/phoneBookSlice';
+  getContactsThunk,
+  addContactsThunk,
+  deleteContactsThunk,
+} from '../../store/Contacts/thunks';
+import { selectContacts } from '../../store/Contacts/selectors';
 import { useSelector, useDispatch } from 'react-redux';
-import { nanoid } from 'nanoid';
 
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
 
 import './App.css';
+import { useEffect } from 'react';
 
 const App = () => {
-  const { contacts, filter } = useSelector(state => state.phonebook);
+  const { items: contacts, isLoading, error, filter } = useSelector(selectContacts);
+
   const dispatch = useDispatch();
 
-  // const [contacts, setContacts] = useState([]);
-  // const [filter, setFilter] = useState('');
-  // const isFirstRender = useRef(true);
+  useEffect(() => {
+    dispatch(getContactsThunk());
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (isFirstRender.current) {
-  //     const parsedContacts = JSON.parse(localStorage.getItem('contacts'));
-  //     if (parsedContacts) {
-  //       setContacts(parsedContacts);
-  //     }
-  //     isFirstRender.current = false;
-  //     return;
-  //   }
-  //   localStorage.setItem('contacts', JSON.stringify(contacts));
-  // }, [contacts]);
-
-  const addNewContact = ({ name, number }) => {
+  const addNewContact = ({ name, phone }) => {
     const ContactAlreadyExist = contacts.some(item => item.name === name);
     if (ContactAlreadyExist) {
       alert('This contact already exist!');
@@ -40,33 +31,25 @@ const App = () => {
     }
 
     const newContact = {
-      id: nanoid(),
       name,
-      number,
+      phone,
     };
 
-    dispatch(addContact(newContact));
-
-    // setContacts(prevContacts => [...prevContacts, newContact]);
+    dispatch(addContactsThunk(newContact));
   };
 
   const deleteContactById = contactId => {
-    // setContacts(prevContacts =>
-    //   prevContacts.filter(contact => contact.id !== contactId)
-    // );
-    dispatch(deleteContact(contactId));
+    dispatch(deleteContactsThunk(contactId));
   };
 
   const getFilterContacts = () => {
+    if (!contacts) return [];
     const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(({ name }) =>
-      name.toLowerCase().includes(normalizedFilter)
-    );
+    return contacts.filter(({ name }) => name.toLowerCase().includes(normalizedFilter));
   };
 
   const onFilterChange = e => {
     dispatch(filterContacts(e.currentTarget.value));
-    // setFilter(e.currentTarget.value);
   };
 
   const filteredContacts = getFilterContacts();
@@ -75,13 +58,12 @@ const App = () => {
     <>
       <h1>Phonebook</h1>
       <ContactForm onFormSubmit={addNewContact} />
-      {contacts.length > 0 && (
-        <Filter value={filter} onFilterChange={onFilterChange} />
+      {contacts?.length > 0 && <Filter value={filter} onFilterChange={onFilterChange} />}
+      {isLoading && <h2>Loading...</h2>}
+      {error && <h2>Error</h2>}
+      {contacts?.length > 0 && (
+        <ContactList contacts={filteredContacts} onDeleteBtnClick={deleteContactById} />
       )}
-      <ContactList
-        contacts={filteredContacts}
-        onDeleteBtnClick={deleteContactById}
-      />
     </>
   );
 };
