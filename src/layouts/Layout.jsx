@@ -12,7 +12,7 @@ function Layout() {
     <>
       <header className={css.header}>
         <nav className={css.nav}>
-          <div className={css.logo}>Logo</div>
+          <div className={css.logo}>Phonebook</div>
           <NavMenu />
           {isLoggedIn ? <UserMenu /> : <AuthBar />}
         </nav>

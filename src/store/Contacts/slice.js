@@ -1,6 +1,6 @@
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { initialState } from './initialState';
-import { getContactsThunk, addContactsThunk, deleteContactsThunk } from './thunks';
+import { getContactsThunk, addContactsThunk, deleteContactsThunk } from './operations';
 
 const STATUS = {
   PENDING: 'pending',

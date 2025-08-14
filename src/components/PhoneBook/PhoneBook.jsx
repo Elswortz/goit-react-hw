@@ -3,7 +3,7 @@ import {
   getContactsThunk,
   addContactsThunk,
   deleteContactsThunk,
-} from '../../store/Contacts/thunks';
+} from '../../store/Contacts/operations';
 import { selectContacts } from '../../store/Contacts/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -22,7 +22,7 @@ const PhoneBook = () => {
     dispatch(getContactsThunk());
   }, [dispatch]);
 
-  const addNewContact = ({ name, phone }) => {
+  const addNewContact = ({ name, number }) => {
     const ContactAlreadyExist = contacts.some(item => item.name === name);
     if (ContactAlreadyExist) {
       alert('This contact already exist!');
@@ -31,7 +31,7 @@ const PhoneBook = () => {
 
     const newContact = {
       name,
-      phone,
+      number,
     };
 
     dispatch(addContactsThunk(newContact));

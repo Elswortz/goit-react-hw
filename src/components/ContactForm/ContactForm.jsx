@@ -10,7 +10,7 @@ const schema = yup.object().shape({
       'Name may contain only letters, apostrophe, dash and spaces.'
     )
     .required('required'),
-  phone: yup
+  number: yup
     .string()
     .matches(
       /^[+]?[0-9]{1,4}?[-.\s]?[(]?[0-9]{1,3}[)]?[-.\s]?[0-9]{1,4}[-.\s]?[0-9]{1,4}[-.\s]?[0-9]{1,9}$/,
@@ -21,7 +21,7 @@ const schema = yup.object().shape({
 
 const initialValues = {
   name: '',
-  phone: '',
+  number: '',
 };
 
 const ContactForm = ({ onFormSubmit }) => {
@@ -43,8 +43,8 @@ const ContactForm = ({ onFormSubmit }) => {
         <div className={css.fieldFullGroup}>
           <label className={css.label}>Phone:</label>
           <div className={css.fieldGroup}>
-            <Field className={css.field} type="tel" name="phone" />
-            <ErrorMessage className={css.errormessage} name="phone" component="div" />
+            <Field className={css.field} type="tel" name="number" />
+            <ErrorMessage className={css.errormessage} name="number" component="div" />
           </div>
         </div>
         <button type="submit">Add contact</button>
