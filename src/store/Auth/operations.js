@@ -29,3 +29,17 @@ export const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.message);
   }
 });
+
+export const refresh = createAsyncThunk('auth/refresh', async (_, thunkAPI) => {
+  const { token } = thunkAPI.getState().auth;
+
+  if (!token) return thunkAPI.rejectWithValue('Invalid token');
+
+  AuthAPI.setAuthHeader(token);
+  try {
+    const respone = await AuthAPI.getCurrentUser();
+    return respone.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});

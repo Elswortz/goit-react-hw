@@ -14,14 +14,6 @@ import storage from 'redux-persist/lib/storage';
 import { authReducer } from './Auth/slice';
 import { contactsReducer } from './Contacts/slice';
 
-// const middleware = [
-//   ...getDefaultMiddleware({
-//     serializableCheck: {
-//       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//     },
-//   }),
-// ];
-
 const authPersistConfig = {
   key: 'auth',
   storage,

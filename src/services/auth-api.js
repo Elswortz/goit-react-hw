@@ -6,6 +6,8 @@ export const loginUser = credentials => api.post('users/login', credentials);
 
 export const logOutUser = () => api.post('users/logout');
 
+export const getCurrentUser = () => api.get('users/current');
+
 export const setAuthHeader = token => {
   api.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
